@@ -23,6 +23,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.rengwuxian.materialedittext.MaterialEditText;
 
+import dmax.dialog.SpotsDialog;
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
@@ -45,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-                                        .setDefaultFontPath("fonts/Arkhip_font.ttf")
+                                        .setDefaultFontPath("fonts/Book_Antiqua.ttf")
                                         .setFontAttrId(R.attr.fontPath)
                                         .build());
         setContentView(R.layout.activity_main);
@@ -76,8 +77,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void showSignInDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("SIGN IN");
-        dialog.setMessage("Please use email to Sign in");
+        dialog.setTitle("ĐĂNG NHẬP");
+        dialog.setMessage("Hãy sử dụng email để đăng nhập");
+
 
         LayoutInflater inflater = LayoutInflater.from(this);
         View signin_layout = inflater.inflate(R.layout.layout_signin,null);
@@ -87,43 +89,56 @@ public class MainActivity extends AppCompatActivity {
 
 
         dialog.setView(signin_layout);
-        dialog.setPositiveButton("SIGN IN", new DialogInterface.OnClickListener() {
+        dialog.setPositiveButton("ĐĂNG NHẬP", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
+
                 dialog.dismiss();
+                //set disable button
+                btnSignIn.setEnabled(false);
+
+
                 if (TextUtils.isEmpty(edtEmail.getText().toString())){
-                    Snackbar.make(rootLayout,"Please enter your Email address",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(rootLayout,"Nhập vào Email của bạn",Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
 
                 if (TextUtils.isEmpty(edtPassword.getText().toString())){
-                    Snackbar.make(rootLayout,"Please enter your Password",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(rootLayout,"Nhập vào mật khảu của bạn",Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 if (edtPassword.getText().toString().length()<6){
-                    Snackbar.make(rootLayout,"Password is too short !!!",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(rootLayout,"Mật khẩu quá ngắn !!!",Snackbar.LENGTH_SHORT).show();
                     return;
                 }
+                final SpotsDialog waitingdialog = new SpotsDialog(MainActivity.this);
+                waitingdialog.show();
+                //login
 
                 auth.signInWithEmailAndPassword(edtEmail.getText().toString(),edtPassword.getText().toString())
                         .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                             @Override
                             public void onSuccess(AuthResult authResult) {
+                                waitingdialog.dismiss();
                                 startActivity(new Intent(MainActivity.this,Welcome.class));
                                 finish();
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
+                        waitingdialog.dismiss();
                         Snackbar.make(rootLayout,"Failed"+e.getMessage(),Snackbar.LENGTH_SHORT).show();
+
+                        //Active button
+                        btnSignIn.setEnabled(true);
                     }
                 });
 
 
             }
         });
-        dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton("HỦY BỎ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -135,8 +150,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void showRegisterDialog() {
         AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-        dialog.setTitle("REGISTER");
-        dialog.setMessage("Please use email to register");
+        dialog.setTitle("ĐĂNG KÝ");
+        dialog.setMessage("Điền đầy đủ thông tin đăng ký");
 
         LayoutInflater inflater = LayoutInflater.from(this);
         View register_layout = inflater.inflate(R.layout.layout_register,null);
@@ -147,25 +162,26 @@ public class MainActivity extends AppCompatActivity {
         final MaterialEditText edtPhone = (MaterialEditText) register_layout.findViewById(R.id.edtPhone);
 
         dialog.setView(register_layout);
-        dialog.setPositiveButton("REGISTER", new DialogInterface.OnClickListener() {
+
+        dialog.setPositiveButton("ĐĂNG KÝ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
                 if (TextUtils.isEmpty(edtEmail.getText().toString())){
-                    Snackbar.make(rootLayout,"Please enter your Email address",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(rootLayout,"Nhập vào Email của bạn",Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 if (TextUtils.isEmpty(edtPhone.getText().toString())){
-                    Snackbar.make(rootLayout,"Please enter your Phone number",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(rootLayout,"Nhập vào số điện thoại của bạn",Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
                 if (TextUtils.isEmpty(edtPassword.getText().toString())){
-                    Snackbar.make(rootLayout,"Please enter your Password",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(rootLayout,"Điền vào mật khẩu cần đăng ký",Snackbar.LENGTH_SHORT).show();
                     return;
                 }
                 if (edtPassword.getText().toString().length()<6){
-                    Snackbar.make(rootLayout,"Password is too short !!!",Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(rootLayout,"Mật khẩu quá ngắn !!!",Snackbar.LENGTH_SHORT).show();
                     return;
                 }
 
@@ -183,13 +199,13 @@ public class MainActivity extends AppCompatActivity {
                                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                                     @Override
                                     public void onSuccess(Void aVoid) {
-                                        Snackbar.make(rootLayout,"Register success fully",Snackbar.LENGTH_SHORT).show();
+                                        Snackbar.make(rootLayout,"Đăng ký tài khoản thành công",Snackbar.LENGTH_SHORT).show();
                                     }
                                 })
                                 .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-                                        Snackbar.make(rootLayout,"Failed" + e.getMessage(),Snackbar.LENGTH_SHORT).show();
+                                        Snackbar.make(rootLayout,"Lỗi" + e.getMessage(),Snackbar.LENGTH_SHORT).show();
                                     }
                                 });
 
@@ -203,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
                 });
             }
         });
-        dialog.setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+        dialog.setNegativeButton("HỦY BỎ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
