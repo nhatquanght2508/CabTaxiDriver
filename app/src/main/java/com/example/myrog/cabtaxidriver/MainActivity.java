@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 
+import com.example.myrog.cabtaxidriver.Common.Common;
 import com.example.myrog.cabtaxidriver.Model.Users;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -52,7 +53,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         auth = FirebaseAuth.getInstance();
         db = FirebaseDatabase.getInstance();
-        users= db.getReference("Users");
+        users= db.getReference(Common.user_driver_tbl);
 
 
 

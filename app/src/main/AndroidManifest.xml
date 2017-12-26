@@ -7,8 +7,9 @@
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -38,7 +39,22 @@
 
         <activity
             android:name=".Welcome"
-            android:label="@string/title_activity_welcome"></activity>
+            android:label="@string/title_activity_welcome" />
+        <activity android:name=".CustomerCall"></activity>
+
+        <service android:name=".Service.MyFirebaseIdService">
+
+            <intent-filter>
+                <action android:name="com.google.firebase.INSTANCE_ID_EVENT"/>
+            </intent-filter>
+        </service>
+
+        <service android:name=".Service.MyFirebaseMessaging">
+
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT"/>
+            </intent-filter>                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  er>
+        </service>
     </application>
 
 </manifest>

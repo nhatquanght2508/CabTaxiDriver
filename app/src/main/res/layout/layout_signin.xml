@@ -18,7 +18,7 @@
             android:id="@+id/edtEmail"
             android:hint="Email"
             android:inputType="textEmailAddress"
-            android:text="nhattruong.2203@gmail.com"
+
             android:textColor="@color/colorPrimary"
             android:textColorHint="@color/colorPrimary"
             android:textSize="20sp"

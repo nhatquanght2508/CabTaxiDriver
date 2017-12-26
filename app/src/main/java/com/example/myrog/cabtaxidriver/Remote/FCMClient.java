@@ -5,10 +5,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 /**
- * Created by My Rog on 11/19/2017.
+ * Created by My Rog on 12/2/2017.
  */
 
-public class RetrofitClient {
+public class FCMClient {
     private static Retrofit retrofit = null;
 
     public static Retrofit getClient(String BaseURL){
